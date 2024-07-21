@@ -3,6 +3,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
+const variants = {
+  hidden: { opacity: 0, y: 50 },
+  enter: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -50 },
+};
+
 export default function PageTransition({
   children,
 }: {
@@ -11,13 +17,14 @@ export default function PageTransition({
   const pathname = usePathname();
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div
         key={pathname}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, y: "-50vh" }}
-        transition={{ duration: 0.8 }}
+        initial="hidden"
+        animate="enter"
+        exit="exit"
+        variants={variants}
+        transition={{ duration: 0.4 }}
       >
         {children}
       </motion.div>
