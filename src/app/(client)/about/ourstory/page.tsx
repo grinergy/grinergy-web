@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 
 import humanImage from "../../../../../public/images/human.jpg";
+import greeny from "../../../../../public/images/ourstory_greeny.png";
 
 export const metadata: Metadata = {
   title: "Our story",
@@ -54,9 +55,11 @@ export default async function OurStoryPage() {
         />
       </section>
       <RoadMap isEng={isEng} />
-      <img
-        className="mt-[8vh] lg:mt-[19.44vh] w-[50px] lg:w-[6.333vw] object-cover block mx-auto"
-        src="/images/ourstory_greeny.png"
+      <Image
+        height={301}
+        className="mt-[8vh] lg:mt-[19.44vh] w-[50px] lg:w-[6.333vw] object-cover blockx` mx-auto"
+        src={greeny}
+        placeholder="blur"
         alt="greeny"
       />
       <Pargraph

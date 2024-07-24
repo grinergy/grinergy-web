@@ -108,7 +108,7 @@ export default function CreateNewsPage() {
       onSubmit={handleSubmit((e) => onSubmit(e))}
       className="bg-white roudned-[10px] size-full overflow-hidden flex flex-col justify-center p-[20px] border border-[#ccc] rounded-[20px] gap-[8px]"
     >
-      <span className={labelCss}>미리보기 이미지 (5MB 이하)</span>
+      <span className={labelCss}>미리보기 이미지</span>
       <label
         htmlFor="file"
         className="w-full h-[200px] aspect-[240/200] bg-center bg-cover lg:w-[240px] lg:h-auto object-contain flex flex-col justify-center items-center gap-[10px] border-dashed border-[#ccc] border-2 rounded-[10px] text-[#ccc] mx-auto hover:border-black hover:text-black cursor-pointer"

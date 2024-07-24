@@ -1,6 +1,6 @@
 import PageInfoSection from "@/components/PageInfoSection";
 import Pagination from "@/components/Pagination";
-import { PAGE_SIZE } from "@/libs/constants";
+import { NEWS_PAGE_SIZE } from "@/libs/constants";
 import {
   getCachedAllNews,
   getCachedTotalNewsCount,
@@ -32,7 +32,7 @@ export default async function NewsPage({
     ? await getSearchedNews(currPage, searchKeyword)
     : await getCachedAllNews(currPage);
 
-  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+  const totalPages = Math.ceil(totalCount / NEWS_PAGE_SIZE);
 
   return (
     <div className="w-[90vw] mb-[2vh] lg:w-[75vw] lg:mb-[4.1666vh] lg:mt-[16.55vh] mx-auto min-h-[74vh] overflow-hidden">
