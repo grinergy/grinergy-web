@@ -3,8 +3,8 @@
 import { unstable_cache } from "next/cache";
 import {
   NEWS_COUNT_TAG,
+  NEWS_PAGE_SIZE,
   NEWS_TAG,
-  PAGE_SIZE,
   REVALIDATE_TIME,
 } from "../constants";
 import db from "../db";
@@ -23,8 +23,8 @@ export async function getAllNews(currPage: number) {
     orderBy: {
       createdAt: "desc",
     },
-    take: PAGE_SIZE,
-    skip: PAGE_SIZE * (currPage - 1),
+    take: NEWS_PAGE_SIZE,
+    skip: NEWS_PAGE_SIZE * (currPage - 1),
   });
   return data;
 }
@@ -47,8 +47,8 @@ export async function getSearchedNews(currPage: number, searchKeyword: string) {
     orderBy: {
       createdAt: "desc",
     },
-    take: PAGE_SIZE,
-    skip: PAGE_SIZE * (currPage - 1),
+    take: NEWS_PAGE_SIZE,
+    skip: NEWS_PAGE_SIZE * (currPage - 1),
   });
   return data;
 }
@@ -102,8 +102,8 @@ export async function getAllNewsForAdmin(currPage: number) {
     orderBy: {
       createdAt: "desc",
     },
-    take: PAGE_SIZE,
-    skip: PAGE_SIZE * (currPage - 1),
+    take: NEWS_PAGE_SIZE,
+    skip: NEWS_PAGE_SIZE * (currPage - 1),
   });
   return data;
 }
@@ -140,8 +140,8 @@ export async function getSearchedNewsForAdmin(
     orderBy: {
       createdAt: "desc",
     },
-    take: PAGE_SIZE,
-    skip: PAGE_SIZE * (currPage - 1),
+    take: NEWS_PAGE_SIZE,
+    skip: NEWS_PAGE_SIZE * (currPage - 1),
   });
   return data;
 }

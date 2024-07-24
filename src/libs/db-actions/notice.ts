@@ -4,8 +4,8 @@ import { Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import {
   NOTICE_COUNT_TAG,
+  NOTICE_PAGE_SIZE,
   NOTICE_TAG,
-  PAGE_SIZE,
   REVALIDATE_TIME,
 } from "../constants";
 import db from "../db";
@@ -23,8 +23,8 @@ export async function getAllNotices(currPage: number) {
     orderBy: {
       createdAt: "desc",
     },
-    take: PAGE_SIZE,
-    skip: PAGE_SIZE * (currPage - 1),
+    take: NOTICE_PAGE_SIZE,
+    skip: NOTICE_PAGE_SIZE * (currPage - 1),
   });
   return data;
 }
@@ -48,8 +48,8 @@ export async function getSearchedNotices(
     orderBy: {
       createdAt: "desc",
     },
-    take: PAGE_SIZE,
-    skip: PAGE_SIZE * (currPage - 1),
+    take: NOTICE_PAGE_SIZE,
+    skip: NOTICE_PAGE_SIZE * (currPage - 1),
   });
   return data;
 }
@@ -106,8 +106,8 @@ export async function getAllNoticesForAdmin(currPage: number) {
     orderBy: {
       createdAt: "desc",
     },
-    take: PAGE_SIZE,
-    skip: PAGE_SIZE * (currPage - 1),
+    take: NOTICE_PAGE_SIZE,
+    skip: NOTICE_PAGE_SIZE * (currPage - 1),
   });
   return data;
 }
@@ -131,8 +131,8 @@ export async function getSearchedNoticesForAdmin(
     orderBy: {
       createdAt: "desc",
     },
-    take: PAGE_SIZE,
-    skip: PAGE_SIZE * (currPage - 1),
+    take: NOTICE_PAGE_SIZE,
+    skip: NOTICE_PAGE_SIZE * (currPage - 1),
   });
   return data;
 }

@@ -1,7 +1,7 @@
 import AdminTable from "@/components/AdminTable";
 import PageInfoSection from "@/components/PageInfoSection";
 import Pagination from "@/components/Pagination";
-import { PAGE_SIZE } from "@/libs/constants";
+import { NEWS_PAGE_SIZE } from "@/libs/constants";
 
 import {
   getCachedAllNewsForAdmin,
@@ -27,7 +27,7 @@ export default async function AdminNewsPage({
     ? await getSearchedNewsForAdmin(currPage, searchKeyword)
     : await getCachedAllNewsForAdmin(currPage);
 
-  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+  const totalPages = Math.ceil(totalCount / NEWS_PAGE_SIZE);
 
   return (
     <div className="w-full h-full bg-white lg:h-screen rounded-[10px] overflow-x-scroll py-[2rem] px-[1rem]">

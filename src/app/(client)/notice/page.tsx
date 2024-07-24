@@ -1,7 +1,7 @@
 import PageInfoSection from "@/components/PageInfoSection";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
-import { PAGE_SIZE } from "@/libs/constants";
+import { NOTICE_PAGE_SIZE } from "@/libs/constants";
 import {
   getCachedAllNotices,
   getCachedTotalNoticeCount,
@@ -31,7 +31,7 @@ export default async function NoticePage({
     ? await getSearchedNotices(currPage, searchKeyword)
     : await getCachedAllNotices(currPage);
 
-  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+  const totalPages = Math.ceil(totalCount / NOTICE_PAGE_SIZE);
 
   return (
     <div className="w-[90vw] mb-[2vh] lg:w-[75vw] lg:mb-[4.1666vh] mx-auto min-h-[74vh] overflow-hidden">

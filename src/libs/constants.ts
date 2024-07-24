@@ -1,4 +1,5 @@
-export const PAGE_SIZE = 10;
+export const NOTICE_PAGE_SIZE = 10;
+export const NEWS_PAGE_SIZE = 9;
 export const REVALIDATE_TIME = 86400; // 1 day
 export const MAX_FILE_SIZE = 5242880;
 
