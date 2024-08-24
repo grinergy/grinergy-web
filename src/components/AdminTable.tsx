@@ -3,7 +3,7 @@
 import { deleteNews } from "@/app/(admin)/admin/(isAdmin)/news/actions";
 import { deleteNotice } from "@/app/(admin)/admin/(isAdmin)/notice/actions";
 import { cn, getErrorMessage } from "@/libs/utils";
-import moment from "moment";
+import moment from "moment-timezone";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -102,7 +102,9 @@ export default function AdminTable({ type, data }: AdminTableProps) {
                       : contentsText}
                   </td>
                   <td className="bg-white text-center w-[20%] align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words">
-                    {moment(item.createdAt).format("YYYY-MM-DD")}
+                    {moment(item.createdAt)
+                      .tz("Asia/Seoul")
+                      .format("YYYY-MM-DD")}
                   </td>
                   <td
                     className="bg-white text-center w-[20%] align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"

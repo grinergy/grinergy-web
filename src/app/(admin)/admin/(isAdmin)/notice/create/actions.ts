@@ -1,5 +1,6 @@
 "use server";
 
+import { createLog } from "@/actions/log.actions";
 import ValidationException from "@/exceptions/ValidationException";
 import { NOTICE_COUNT_TAG, NOTICE_TAG } from "@/libs/constants";
 import db from "@/libs/db";
@@ -42,6 +43,8 @@ export async function uploadNotice(formData: FormData) {
         ),
       });
     }
+
+    await createLog("NOTICE", notice.id, "CREATE", { title, contents, files });
 
     revalidateTag(NOTICE_TAG);
     revalidateTag(NOTICE_COUNT_TAG);

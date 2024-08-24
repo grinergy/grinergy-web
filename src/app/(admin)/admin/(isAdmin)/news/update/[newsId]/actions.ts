@@ -1,5 +1,6 @@
 "use server";
 
+import { createLog } from "@/actions/log.actions";
 import NotFoundException from "@/exceptions/NotFoundException";
 import ValidationException from "@/exceptions/ValidationException";
 import { NEWS_TAG } from "@/libs/constants";
@@ -49,10 +50,10 @@ export const updateNews = async (newsId: string, formData: FormData) => {
         url: url || undefined,
         photo,
       },
-      select: {
-        id: true,
-      },
     });
+
+    await createLog("NEWS", newsId, "UPDATE", { title, url, contents, photo });
+
     revalidateTag(NEWS_TAG);
   } catch (error) {
     return await handleError(error);

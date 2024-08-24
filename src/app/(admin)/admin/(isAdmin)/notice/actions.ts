@@ -1,5 +1,6 @@
 "use server";
 
+import { createLog } from "@/actions/log.actions";
 import NotFoundException from "@/exceptions/NotFoundException";
 import { NOTICE_COUNT_TAG, NOTICE_TAG } from "@/libs/constants";
 import db from "@/libs/db";
@@ -37,6 +38,8 @@ export async function deleteNotice(noticeId: string) {
 
     // 모든 파일 삭제 작업이 완료될 때까지 기다림
     await Promise.all(fileDeletionPromises);
+
+    await createLog("NOTICE", noticeId, "DELETE", null);
 
     revalidateTag(NOTICE_TAG);
     revalidateTag(NOTICE_COUNT_TAG);
