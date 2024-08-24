@@ -2,7 +2,7 @@ import FileDownload from "@/components/FileDownload";
 import db from "@/libs/db";
 import DOMPurify from "dompurify";
 import { JSDOM } from "jsdom";
-import moment from "moment";
+import moment from "moment-timezone";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -39,7 +39,7 @@ export default async function NoticeDetailPage({
               {data.title}
             </h2>
             <span className="text-[10px] lg:text-[14px] text-[#666]">
-              {moment(data.createdAt).format("YYYY-MM-DD")}
+              {moment(data.createdAt).tz("Asia/Seoul").format("YYYY-MM-DD")}
             </span>
           </div>
           <div className="ql-snow">

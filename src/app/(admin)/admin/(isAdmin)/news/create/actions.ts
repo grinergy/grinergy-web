@@ -1,5 +1,6 @@
 "use server";
 
+import { createLog } from "@/actions/log.actions";
 import ValidationException from "@/exceptions/ValidationException";
 import { NEWS_COUNT_TAG, NEWS_TAG } from "@/libs/constants";
 import db from "@/libs/db";
@@ -19,7 +20,7 @@ export async function uploadNews(formData: FormData) {
     const result = newsSchema.safeParse(data);
     if (!result.success) throw new ValidationException();
     const { title, url, contents, photo } = result.data;
-    await db.news.create({
+    const { id } = await db.news.create({
       data: {
         title,
         contents,
@@ -30,6 +31,8 @@ export async function uploadNews(formData: FormData) {
         id: true,
       },
     });
+
+    await createLog("NEWS", id, "CREATE", { title, url, contents, photo });
 
     revalidateTag(NEWS_TAG);
     revalidateTag(NEWS_COUNT_TAG);

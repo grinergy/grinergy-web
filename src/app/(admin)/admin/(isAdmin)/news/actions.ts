@@ -1,5 +1,6 @@
 "use server";
 
+import { createLog } from "@/actions/log.actions";
 import NotFoundException from "@/exceptions/NotFoundException";
 import { NEWS_COUNT_TAG, NEWS_TAG } from "@/libs/constants";
 import db from "@/libs/db";
@@ -27,6 +28,8 @@ export async function deleteNews(newsId: string) {
         id: news.id,
       },
     });
+
+    await createLog("NEWS", newsId, "DELETE", null);
 
     revalidateTag(NEWS_TAG);
     revalidateTag(NEWS_COUNT_TAG);

@@ -40,3 +40,26 @@ model File {
   notice   Notice @relation(fields: [noticeId], references: [id], onDelete: Cascade)
   noticeId String @db.ObjectId
 }
+
+model OperationLog {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  modelType     ModelType
+  modelId       String
+  operationType OperationType
+  changedData   Json?
+  timestamp     DateTime      @default(now())
+  ipAddress     String?
+  description   String?
+}
+
+enum ModelType {
+  NEWS
+  NOTICE
+}
+
+enum OperationType {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+}

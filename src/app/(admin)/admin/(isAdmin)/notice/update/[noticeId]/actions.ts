@@ -5,6 +5,7 @@ import NotFoundException from "@/exceptions/NotFoundException";
 import { NOTICE_TAG } from "@/libs/constants";
 import db from "@/libs/db";
 
+import { createLog } from "@/actions/log.actions";
 import ValidationException from "@/exceptions/ValidationException";
 import { deleteOneFile } from "@/libs/db-actions/file";
 import handleError from "@/libs/error-handler";
@@ -73,6 +74,14 @@ export const updateNotice = async (noticeId: string, formData: FormData) => {
         ),
       });
     }
+
+    await createLog("NOTICE", noticeId, "UPDATE", {
+      title,
+      contents,
+      files,
+      deletedFiles,
+    });
+
     revalidateTag(NOTICE_TAG);
   } catch (error) {
     return await handleError(error);
