@@ -15,8 +15,9 @@ export default function ComparisonGraph({ isEng }: { isEng: boolean }) {
   const pseudoBoxCss =
     "h-[100px] sm:h-[120px] lg:h-full w-full lg:w-[14.7396vw] flex justify-center items-center mr-0 lg:mr-[1.1979vw] mb-[10px] lg:mb-0";
   const circleCss =
-    "size-[100px] sm:size-[120px] lg:size-[14.7396vw] border-[0.5px] md:border-[0.75px] lg:border-[0.5px] border-white rounded-full flex justify-center items-center text-center whitespace-pre-wrap";
+    "size-[100px] sm:size-[120px] lg:size-[14.7396vw] border rounded-full flex justify-center items-center text-center whitespace-pre-wrap";
   const colLineCss = "h-[0.75px] w-full lg:w-[0.5px] lg:h-[17.5926vh] bg-white";
+
   return (
     <section
       className={cn(

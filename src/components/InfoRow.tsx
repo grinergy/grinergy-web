@@ -80,7 +80,7 @@ export default function InfoRow({
               <span className="contact-row-left-span text-black/50 flex gap-[3px] font-normal">
                 <Moment
                   format="hh"
-                  tz="Asia/Seoul"
+                  tz={textData[idx].tz}
                   className="tracking-[-0.03em]"
                 >
                   {currTime}
@@ -88,7 +88,7 @@ export default function InfoRow({
                 <span className="relative bottom-[2px] animate-blink">:</span>
                 <Moment
                   format="mm a"
-                  tz="Asia/Seoul"
+                  tz={textData[idx].tz}
                   className="tracking-[-0.03em]"
                 >
                   {currTime}
