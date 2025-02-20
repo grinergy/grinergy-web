@@ -25,6 +25,7 @@ interface NoticeDetail {
   }[];
   title: string;
   contents: string;
+  createdAt: string;
 }
 
 export default function UpdateNoticePage({
@@ -102,6 +103,7 @@ export default function UpdateNoticePage({
     const formData = new FormData();
     if (data.title) formData.append("title", data.title);
     if (data.contents) formData.append("contents", data.contents);
+    if (data.createdAt) formData.append("createdAt", data.createdAt);
     if (data.deletedFiles) {
       data.deletedFiles.forEach((deletedFileKey) =>
         formData.append("deletedFiles", deletedFileKey)
@@ -177,6 +179,20 @@ export default function UpdateNoticePage({
         <Editor onChange={handleChange} defaultValue={notice!.contents} />
         <span className="text-red-500 font-medium font-kr text-sm">
           {[errors.contents?.message ?? ""]}
+        </span>
+      </div>
+      <label className={labelCss} htmlFor="createdAt">
+        게시글 작성일
+      </label>
+      <div>
+        <input
+          className="w-full p-[10px] mb-[10px] border border-[#ccc] font-kr"
+          type="datetime-local"
+          defaultValue={new Date(notice!.createdAt).toISOString().slice(0, 16)}
+          {...register("createdAt")}
+        />
+        <span className="text-red-500 font-medium font-kr text-sm">
+          {[errors.createdAt?.message ?? ""]}
         </span>
       </div>
       <label className={labelCss} htmlFor="file">
