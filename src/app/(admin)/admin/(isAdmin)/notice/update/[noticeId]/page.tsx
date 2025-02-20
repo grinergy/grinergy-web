@@ -10,6 +10,7 @@ import GlobalException from "@/exceptions/GlobalException";
 import useAbortController from "@/hooks/useAbortController";
 import { getUploadUrl } from "@/libs/db-actions/file";
 import { cn, getErrorMessage } from "@/libs/utils";
+import moment from "moment-timezone";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { UploadFileData } from "../../create/page";
@@ -103,7 +104,10 @@ export default function UpdateNoticePage({
     const formData = new FormData();
     if (data.title) formData.append("title", data.title);
     if (data.contents) formData.append("contents", data.contents);
-    if (data.createdAt) formData.append("createdAt", data.createdAt);
+    // UI에서 선택한 KST 값을 UTC로 변환 후 저장
+    if (data.createdAt)
+      formData.append("createdAt", new Date(data.createdAt).toISOString());
+
     if (data.deletedFiles) {
       data.deletedFiles.forEach((deletedFileKey) =>
         formData.append("deletedFiles", deletedFileKey)
@@ -188,7 +192,9 @@ export default function UpdateNoticePage({
         <input
           className="w-full p-[10px] mb-[10px] border border-[#ccc] font-kr"
           type="datetime-local"
-          defaultValue={new Date(notice!.createdAt).toISOString().slice(0, 16)}
+          defaultValue={moment(notice?.createdAt)
+            .tz("Asia/Seoul")
+            .format("YYYY-MM-DDTHH:MM")}
           {...register("createdAt")}
         />
         <span className="text-red-500 font-medium font-kr text-sm">
