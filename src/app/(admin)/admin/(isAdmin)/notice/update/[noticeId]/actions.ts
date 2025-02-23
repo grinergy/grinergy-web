@@ -18,6 +18,7 @@ export const updateNotice = async (noticeId: string, formData: FormData) => {
     const data = {
       title: formData.get("title"),
       contents: formData.get("contents"),
+      createdAt: formData.get("createdAt"),
       deletedFiles: formData.getAll("deletedFiles"),
       files: formData.getAll("files"),
     };
@@ -36,7 +37,7 @@ export const updateNotice = async (noticeId: string, formData: FormData) => {
     const result = updateNoticeSchema.safeParse(data);
     if (!result.success) throw new ValidationException();
 
-    const { title, contents, files, deletedFiles } = result.data;
+    const { title, contents, createdAt, files, deletedFiles } = result.data;
 
     try {
       deletedFiles?.forEach(async (deletedFileKey) => {
@@ -59,6 +60,7 @@ export const updateNotice = async (noticeId: string, formData: FormData) => {
       data: {
         title: title ? title : undefined,
         contents: contents ? contents : undefined,
+        createdAt: createdAt ? new Date(createdAt) : undefined,
       },
     });
 
@@ -78,6 +80,7 @@ export const updateNotice = async (noticeId: string, formData: FormData) => {
     await createLog("NOTICE", noticeId, "UPDATE", {
       title,
       contents,
+      createdAt,
       files,
       deletedFiles,
     });

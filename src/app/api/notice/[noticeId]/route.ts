@@ -14,6 +14,7 @@ export async function GET(
         title: true,
         contents: true,
         files: true,
+        createdAt: true,
       },
     });
 
