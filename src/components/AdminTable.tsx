@@ -1,7 +1,10 @@
 "use client";
 
 import { deleteNews } from "@/app/(admin)/admin/(isAdmin)/news/actions";
-import { deleteNotice } from "@/app/(admin)/admin/(isAdmin)/notice/actions";
+import {
+  deleteNotice,
+  toggleNoticeVisibility,
+} from "@/app/(admin)/admin/(isAdmin)/notice/actions";
 import { cn, getErrorMessage } from "@/libs/utils";
 import moment from "moment-timezone";
 import { useRouter } from "next/navigation";
@@ -16,6 +19,7 @@ interface AdminTableProps {
         title: string;
         contents: string;
         createdAt: Date;
+        isHidden?: boolean;
       }[]
     | undefined;
 }
@@ -25,6 +29,7 @@ export default function AdminTable({ type, data }: AdminTableProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isToggling, setIsToggling] = useState<boolean>(false);
 
   const deleteItem = async () => {
     if (isLoading || !selectedItemId) return;
@@ -46,33 +51,55 @@ export default function AdminTable({ type, data }: AdminTableProps) {
     setIsLoading(false);
   };
 
+  const toggleVisibility = async (itemId: string, isHidden: boolean) => {
+    if (isToggling) return;
+    setIsToggling(true);
+
+    const error = await toggleNoticeVisibility(itemId, isHidden);
+
+    if (error?.message) {
+      toast.error(getErrorMessage(error));
+    } else {
+      toast.success(
+        `게시글을 ${isHidden ? "보이도록" : "숨기도록"} 처리했습니다`
+      );
+    }
+    setIsToggling(false);
+  };
+
   return (
     <>
       <table className="table-fixed w-full text-[10px] lg:text-[0.9em] border-[1px] border-black/30 border-collapse overflow-hidden font-kr">
         <colgroup>
-          <col style={{ width: "40%" }} />
-          <col style={{ width: "30%" }} />
-          <col style={{ width: "20%" }} />
+          <col style={{ width: "35%" }} />
+          <col style={{ width: "25%" }} />
+          <col style={{ width: "25%" }} />
           <col style={{ width: "5%" }} />
           <col style={{ width: "5%" }} />
+          {type === "notice" && <col style={{ width: "5%" }} />}
         </colgroup>
         <thead className="font-normal text-white bg-black/80">
           <tr>
-            <th className="p-[5px] text-center w-[20%] align-middle lg:p-[10px]">
+            <th className="p-[5px] text-center align-middle lg:p-[10px]">
               제목
             </th>
-            <th className="p-[5px] text-center w-[20%] align-middle lg:p-[10px]">
+            <th className="p-[5px] text-center align-middle lg:p-[10px]">
               내용
             </th>
-            <th className="p-[5px] text-center w-[20%] align-middle lg:p-[10px]">
+            <th className="p-[5px] text-center align-middle lg:p-[10px]">
               작성일
             </th>
-            <th className="p-[5px] text-center w-[20%] align-middle lg:p-[10px]">
+            <th className="p-[5px] text-center align-middle lg:p-[10px]">
               수정
             </th>
-            <th className="p-[5px] text-center w-[20%] align-middle lg:p-[10px]">
+            <th className="p-[5px] text-center align-middle lg:p-[10px]">
               삭제
             </th>
+            {type === "notice" && (
+              <th className="p-[5px] text-center align-middle lg:p-[10px]">
+                숨김
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -85,7 +112,7 @@ export default function AdminTable({ type, data }: AdminTableProps) {
                     onClick={() => {
                       type === "notice" && router.push(`/notice/${item.id}`);
                     }}
-                    className="bg-white text-center w-[20%] align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"
+                    className="bg-white text-center align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"
                   >
                     {item.title.length > 20
                       ? item.title.substring(0, 20) + "..."
@@ -95,19 +122,19 @@ export default function AdminTable({ type, data }: AdminTableProps) {
                     onClick={() => {
                       type === "notice" && router.push(`/notice/${item.id}`);
                     }}
-                    className="bg-white text-center w-[20%] align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"
+                    className="bg-white text-center align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"
                   >
                     {contentsText.length > 30
                       ? contentsText.substring(0, 30) + "..."
                       : contentsText}
                   </td>
-                  <td className="bg-white text-center w-[20%] align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words">
+                  <td className="bg-white text-center align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words">
                     {moment(item.createdAt)
                       .tz("Asia/Seoul")
                       .format("YYYY-MM-DD")}
                   </td>
                   <td
-                    className="bg-white text-center w-[20%] align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"
+                    className="bg-white text-center align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"
                     onClick={() =>
                       router.push(`/admin/${type}/update/${item.id}`)
                     }
@@ -128,7 +155,7 @@ export default function AdminTable({ type, data }: AdminTableProps) {
                     </svg>
                   </td>
                   <td
-                    className="bg-white text-center w-[20%] align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"
+                    className="bg-white text-center align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"
                     onClick={() => {
                       setSelectedItemId(item.id);
                       setIsModalOpen(true);
@@ -149,6 +176,48 @@ export default function AdminTable({ type, data }: AdminTableProps) {
                       />
                     </svg>
                   </td>
+                  {type === "notice" && (
+                    <td
+                      className="bg-white text-center align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"
+                      onClick={() => toggleVisibility(item.id, item.isHidden)}
+                    >
+                      <button disabled={isToggling}>
+                        {isToggling ? (
+                          "처리중..."
+                        ) : item.isHidden ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-eye-icon lucide-eye size-[1.2rem] inline"
+                          >
+                            <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-eye-off-icon lucide-eye-off size-[1.2rem] inline"
+                          >
+                            <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+                            <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                            <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+                            <path d="m2 2 20 20" />
+                          </svg>
+                        )}
+                      </button>
+                    </td>
+                  )}
                 </tr>
               );
             })}

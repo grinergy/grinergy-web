@@ -15,6 +15,9 @@ import db from "../db";
 export async function getAllNotices(currPage: number) {
   if (currPage <= 0) return;
   const data = await db.notice.findMany({
+    where: {
+      isHidden: { not: true },
+    },
     select: {
       id: true,
       title: true,
@@ -41,6 +44,7 @@ export async function getSearchedNotices(
       createdAt: true,
     },
     where: {
+      isHidden: { not: true },
       title: {
         contains: searchKeyword,
       },
@@ -70,12 +74,13 @@ export async function getCachedAllNotices(currPage: number) {
 export type Notices = Prisma.PromiseReturnType<typeof getAllNotices>;
 
 export async function getTotalNoticeCount() {
-  return await db.notice.count();
+  return await db.notice.count({ where: { isHidden: { not: true } } });
 }
 
 export async function getSearchedNoticeCount(searchKeyword: string) {
   return await db.notice.count({
     where: {
+      isHidden: { not: true },
       title: {
         contains: searchKeyword,
       },
@@ -102,6 +107,7 @@ export async function getAllNoticesForAdmin(currPage: number) {
       title: true,
       contents: true,
       createdAt: true,
+      isHidden: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -122,6 +128,7 @@ export async function getSearchedNoticesForAdmin(
       title: true,
       contents: true,
       createdAt: true,
+      isHidden: true,
     },
     where: {
       title: {
@@ -148,4 +155,41 @@ export async function getCachedAllNoticesForAdmin(currPage: number) {
   );
 
   return cachedOperation(currPage);
+}
+
+export async function getTotalNoticeCountForAdmin() {
+  return await db.notice.count();
+}
+
+export async function getSearchedNoticeCountForAdmin(searchKeyword: string) {
+  return await db.notice.count({
+    where: {
+      title: {
+        contains: searchKeyword,
+      },
+    },
+  });
+}
+
+export const getCachedTotalNoticeCountForAdmin = unstable_cache(
+  getTotalNoticeCountForAdmin,
+  [NOTICE_COUNT_TAG, "admin"],
+  {
+    tags: [NOTICE_COUNT_TAG, "admin"],
+    revalidate: REVALIDATE_TIME,
+  }
+);
+
+export async function getCachedSearchedNoticeCountForAdmin(
+  searchKeyword: string
+) {
+  const cachedOperation = unstable_cache(
+    getSearchedNoticeCountForAdmin,
+    [NOTICE_COUNT_TAG, "admin", searchKeyword],
+    {
+      tags: [NOTICE_COUNT_TAG, "admin", searchKeyword],
+      revalidate: REVALIDATE_TIME,
+    }
+  );
+  return cachedOperation(searchKeyword);
 }

@@ -4,8 +4,8 @@ import Pagination from "@/components/Pagination";
 import { NOTICE_PAGE_SIZE } from "@/libs/constants";
 import {
   getCachedAllNoticesForAdmin,
-  getCachedTotalNoticeCount,
-  getSearchedNoticeCount,
+  getCachedSearchedNoticeCountForAdmin,
+  getCachedTotalNoticeCountForAdmin,
   getSearchedNoticesForAdmin,
 } from "@/libs/db-actions/notice";
 import { redirect } from "next/navigation";
@@ -20,8 +20,8 @@ export default async function AdminNoticePage({
 
   const searchKeyword = searchParams?.keyword;
   const totalCount = searchKeyword
-    ? await getSearchedNoticeCount(searchKeyword)
-    : await getCachedTotalNoticeCount();
+    ? await getCachedSearchedNoticeCountForAdmin(searchKeyword)
+    : await getCachedTotalNoticeCountForAdmin();
   const data = searchKeyword
     ? await getSearchedNoticesForAdmin(currPage, searchKeyword)
     : await getCachedAllNoticesForAdmin(currPage);

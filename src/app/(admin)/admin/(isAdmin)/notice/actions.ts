@@ -47,3 +47,19 @@ export async function deleteNotice(noticeId: string) {
     return await handleError(error);
   }
 }
+
+export async function toggleNoticeVisibility(noticeId: string, isHidden: boolean) {
+  try {
+    await db.notice.update({
+      where: { id: noticeId },
+      data: { isHidden: !isHidden },
+    });
+
+    await createLog("NOTICE", noticeId, "UPDATE", { isHidden: !isHidden });
+
+    revalidateTag(NOTICE_TAG);
+    revalidateTag(NOTICE_COUNT_TAG);
+  } catch (error) {
+    return await handleError(error);
+  }
+}

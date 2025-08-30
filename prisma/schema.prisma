@@ -28,6 +28,7 @@ model Notice {
   title     String
   contents  String
   files     File[]
+  isHidden  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
