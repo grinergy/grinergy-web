@@ -1,0 +1,135 @@
+{
+  "general": {
+    "defaultApprovalMode": "auto_edit",
+
+    "plan": {
+      "enabled": true,
+
+      "directory": "./.gemini/plans",
+
+      "modelRouting": true
+    },
+
+    "checkpointing": {
+      "enabled": true
+    },
+
+    "sessionRetention": {
+      "enabled": true,
+
+      "maxAge": "7d",
+
+      "maxCount": 200
+    }
+  },
+
+  "modelConfigs": {
+    "customAliases": {
+      "fast-dev": {
+        "modelConfig": {
+          "model": "gemini-3.1-flash-preview",
+          "generateContentConfig": {
+            "temperature": 0.2,
+            "topP": 0.95,
+            "thinkingConfig": {
+              "thinkingBudget": 12000
+            }
+          }
+        }
+      }
+    }
+  },
+  "context": {
+    "includeDirectories": ["./"],
+
+    "includeDirectoryTree": true,
+
+    "loadMemoryFromIncludeDirectories": true,
+
+    "fileFiltering": {
+      "respectGitIgnore": false,
+      "enableRecursiveFileSearch": true,
+      "enableFuzzySearch": true
+    }
+  },
+
+  "contextManagement": {
+    "historyWindow": {
+      "maxTokens": 200000,
+
+      "retainedTokens": 60000
+    },
+
+    "messageLimits": {
+      "normalMaxTokens": 4000,
+      "retainedMaxTokens": 16000
+    },
+
+    "tools": {
+      "distillation": {
+        "maxOutputTokens": 15000,
+
+        "summarizationThresholdTokens": 30000
+      }
+    }
+  },
+
+  "tools": {
+    "useRipgrep": true,
+
+    "allowed": [
+      "run_shell_command(git)",
+      "run_shell_command(./gradlew)",
+      "run_shell_command(npm)",
+      "run_shell_command(docker)"
+    ],
+
+    "shell": {
+      "backgroundCompletionBehavior": "notify",
+
+      "inactivityTimeout": 600
+    }
+  },
+
+  "mcpServers": {
+    "context7": {
+      "trust": true
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "trust": true
+    }
+  },
+  "mcp": {
+    "allowed": ["context7", "sequential-thinking"]
+  },
+
+  "experimental": {
+    "taskTracker": true,
+
+    "modelSteering": true,
+
+    "contextManagement": true,
+
+    "generalistProfile": true
+  },
+
+  "security": {
+    "toolSandboxing": false,
+
+    "enablePermanentToolApproval": true,
+
+    "autoAddToPolicyByDefault": true
+  },
+
+  "ui": {
+    "compactToolOutput": true,
+
+    "showLineNumbers": true,
+
+    "inlineThinkingMode": "full",
+
+    "hideTips": true
+  }
+}
