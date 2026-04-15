@@ -105,7 +105,7 @@ export default function AdminTable({ type, data }: AdminTableProps) {
         <tbody>
           {data &&
             data.map((item: any) => {
-              const contentsText = item.contents.replace(/<[^>]*>?/g, "");
+              const contentsText = (item.contents || "").replace(/<[^>]*>?/g, "");
               return (
                 <tr key={item.id} className="cursor-pointer group">
                   <td
@@ -114,7 +114,7 @@ export default function AdminTable({ type, data }: AdminTableProps) {
                     }}
                     className="bg-white text-center align-middle py-[1em] px-[0.5em] group-hover:bg-black/10 break-words"
                   >
-                    {item.title.length > 20
+                    {(item.title?.length || 0) > 20
                       ? item.title.substring(0, 20) + "..."
                       : item.title}
                   </td>
