@@ -108,19 +108,6 @@ export async function getAllNewsForAdmin(currPage: number) {
   return data;
 }
 
-export async function getCachedAllNewsForAdmin(currPage: number) {
-  const cachedOperation = unstable_cache(
-    getAllNewsForAdmin,
-    [NEWS_TAG, currPage + ""],
-    {
-      tags: [NEWS_TAG, currPage + ""],
-      revalidate: REVALIDATE_TIME,
-    }
-  );
-
-  return cachedOperation(currPage);
-}
-
 export async function getSearchedNewsForAdmin(
   currPage: number,
   searchKeyword: string

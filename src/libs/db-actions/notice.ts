@@ -144,19 +144,6 @@ export async function getSearchedNoticesForAdmin(
   return data;
 }
 
-export async function getCachedAllNoticesForAdmin(currPage: number) {
-  const cachedOperation = unstable_cache(
-    getAllNoticesForAdmin,
-    [NOTICE_TAG, currPage + ""],
-    {
-      tags: [NOTICE_TAG, currPage + ""],
-      revalidate: REVALIDATE_TIME,
-    }
-  );
-
-  return cachedOperation(currPage);
-}
-
 export async function getTotalNoticeCountForAdmin() {
   return await db.notice.count();
 }
@@ -171,25 +158,3 @@ export async function getSearchedNoticeCountForAdmin(searchKeyword: string) {
   });
 }
 
-export const getCachedTotalNoticeCountForAdmin = unstable_cache(
-  getTotalNoticeCountForAdmin,
-  [NOTICE_COUNT_TAG, "admin"],
-  {
-    tags: [NOTICE_COUNT_TAG, "admin"],
-    revalidate: REVALIDATE_TIME,
-  }
-);
-
-export async function getCachedSearchedNoticeCountForAdmin(
-  searchKeyword: string
-) {
-  const cachedOperation = unstable_cache(
-    getSearchedNoticeCountForAdmin,
-    [NOTICE_COUNT_TAG, "admin", searchKeyword],
-    {
-      tags: [NOTICE_COUNT_TAG, "admin", searchKeyword],
-      revalidate: REVALIDATE_TIME,
-    }
-  );
-  return cachedOperation(searchKeyword);
-}
