@@ -4,10 +4,10 @@ import Pagination from "@/components/Pagination";
 import { NEWS_PAGE_SIZE } from "@/libs/constants";
 
 import {
-  getCachedAllNewsForAdmin,
-  getCachedTotalNewsCount,
+  getAllNewsForAdmin,
   getSearchedNewsCount,
   getSearchedNewsForAdmin,
+  getTotalNewsCount,
 } from "@/libs/db-actions/news";
 import { redirect } from "next/navigation";
 
@@ -22,10 +22,10 @@ export default async function AdminNewsPage({
   const searchKeyword = searchParams?.keyword;
   const totalCount = searchKeyword
     ? await getSearchedNewsCount(searchKeyword)
-    : await getCachedTotalNewsCount();
+    : await getTotalNewsCount();
   const data = searchKeyword
     ? await getSearchedNewsForAdmin(currPage, searchKeyword)
-    : await getCachedAllNewsForAdmin(currPage);
+    : await getAllNewsForAdmin(currPage);
 
   const totalPages = Math.ceil(totalCount / NEWS_PAGE_SIZE);
 
