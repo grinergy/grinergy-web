@@ -117,6 +117,8 @@ export default function Editor({
       onChange={onChange}
       modules={modules}
       formats={formats}
+      // 시맨틱 HTML은 공백을 &nbsp;로 저장하고 data-list를 제거해 목록 스타일이 깨짐
+      useSemanticHTML={false}
     />
   );
 }
