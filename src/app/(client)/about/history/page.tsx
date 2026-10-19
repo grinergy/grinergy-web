@@ -1,5 +1,5 @@
-import BigPhrase from "@/components/BigPhrase";
-import HistoryList from "@/components/HistoryList";
+import BigPhrase from "@/components/common/BigPhrase";
+import HistoryList from "@/components/about/HistoryList";
 import { cn, getIsEng } from "@/libs/utils";
 import { Metadata } from "next";
 import { useTranslations } from "next-intl";

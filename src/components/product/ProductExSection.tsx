@@ -1,11 +1,11 @@
 import Image from "next/image";
 
-import ex1 from "../../public/images/ex1.jpg";
-import ex2 from "../../public/images/ex2.jpg";
-import ex3 from "../../public/images/ex3.jpg";
-import ex4 from "../../public/images/ex4.jpg";
-import ex5 from "../../public/images/ex5.jpg";
-import ex6 from "../../public/images/ex6.jpg";
+import ex1 from "../../../public/images/ex1.jpg";
+import ex2 from "../../../public/images/ex2.jpg";
+import ex3 from "../../../public/images/ex3.jpg";
+import ex4 from "../../../public/images/ex4.jpg";
+import ex5 from "../../../public/images/ex5.jpg";
+import ex6 from "../../../public/images/ex6.jpg";
 
 const productExList = [
   {

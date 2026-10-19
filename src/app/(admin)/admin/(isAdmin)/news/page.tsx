@@ -1,6 +1,6 @@
-import AdminTable from "@/components/AdminTable";
-import PageInfoSection from "@/components/PageInfoSection";
-import Pagination from "@/components/Pagination";
+import AdminTable from "@/components/admin/AdminTable";
+import PageInfoSection from "@/components/common/PageInfoSection";
+import Pagination from "@/components/common/Pagination";
 import { NEWS_PAGE_SIZE } from "@/libs/constants";
 
 import {
@@ -11,11 +11,10 @@ import {
 } from "@/libs/db-actions/news";
 import { redirect } from "next/navigation";
 
-export default async function AdminNewsPage({
-  searchParams,
-}: {
-  searchParams?: { page: string; keyword: string };
+export default async function AdminNewsPage(props: {
+  searchParams?: Promise<{ page: string; keyword: string }>;
 }) {
+  const searchParams = await props.searchParams;
   const currPage = searchParams?.page ? Number(searchParams.page) : 1;
   if (currPage <= 0) redirect("/admin/news");
 

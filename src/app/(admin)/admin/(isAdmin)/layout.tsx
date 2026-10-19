@@ -1,5 +1,5 @@
 import { getIsAdmin } from "@/app/actions";
-import AdminClientLayout from "@/components/AdminClientLayout";
+import AdminClientLayout from "@/components/admin/AdminClientLayout";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 

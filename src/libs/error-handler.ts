@@ -22,7 +22,8 @@ export default async function handleError(
     );
 
     return {
-      message: error instanceof Error ? error.message : "Server Error",
+      // 내부 에러 내용(DB 등)이 클라이언트에 노출되지 않도록 일반 메시지만 돌려준다
+      message: "서버 에러가 발생했습니다. 관리자에게 문의하세요.",
       statusCode: 500,
     };
   }

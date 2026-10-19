@@ -73,6 +73,16 @@
 .quill .ql-editor * {
   font: revert;
 }
+/* Quill 1로 작성된 기존 글(data-list 없는 ul/ol)의 목록 기호 */
+.ql-editor ul {
+  padding-left: 1.5em;
+}
+.ql-editor ul > li:not([data-list]) {
+  list-style-type: disc;
+}
+.ql-editor ol > li:not([data-list]) {
+  list-style-type: decimal;
+}
 .ql-picker.ql-font .ql-picker-item {
   font-size: 0;
 }

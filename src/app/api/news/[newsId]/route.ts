@@ -1,10 +1,10 @@
 import db from "@/libs/db";
+import handleError from "@/libs/error-handler";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  { params: { newsId } }: { params: { newsId: string } }
-) {
+export async function GET(req: NextRequest, props: { params: Promise<{ newsId: string }> }) {
+  const { newsId } = await props.params;
+
   try {
     const findNews = await db.news.findUnique({
       where: {
@@ -20,6 +20,7 @@ export async function GET(
 
     return NextResponse.json(findNews);
   } catch (error) {
+    await handleError(error);
     return NextResponse.json(
       "서버 에러가 발생했습니다. 관리자에게 문의하세요.",
       {

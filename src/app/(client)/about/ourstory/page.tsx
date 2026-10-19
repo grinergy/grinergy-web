@@ -1,8 +1,8 @@
-import BannerSlider from "@/components/BannerSlider";
-import BigPhrase from "@/components/BigPhrase";
-import Pargraph from "@/components/Pargraph";
-import PromotionVideo from "@/components/PromotionVideo";
-import RoadMap from "@/components/RoadMap";
+import BannerSlider from "@/components/about/BannerSlider";
+import BigPhrase from "@/components/common/BigPhrase";
+import Paragraph from "@/components/common/Paragraph";
+import PromotionVideo from "@/components/about/PromotionVideo";
+import RoadMap from "@/components/about/RoadMap";
 import { getIsEng } from "@/libs/utils";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -20,24 +20,24 @@ export default async function OurStoryPage() {
     <div className="mb-[2vh] lg:mb-[4.1666vh] overflow-x-hidden">
       <BigPhrase at="Ourstory" isEng={isEng} />
       <BannerSlider />
-      <Pargraph at="Ourstory" idx={1} isEng={isEng} />
+      <Paragraph at="Ourstory" idx={1} isEng={isEng} />
       {/* video clip 수정 필요 */}
       <PromotionVideo isEng={isEng} />
       <div className="w-fit flex flex-col gap-[46px] lg:gap-[8.426vh] my-[8vh] lg:mx-auto lg:my-[17.592vh]">
         {/* margin 해결 필요 */}
-        <Pargraph
+        <Paragraph
           at="Ourstory"
           idx={2}
           isEng={isEng}
           className="m-0 md:m-0 lg:m-0 lg:w-auto"
         />
-        <Pargraph
+        <Paragraph
           at="Ourstory"
           idx={3}
           isEng={isEng}
           className="m-0 md:m-0 lg:m-0 lg:w-auto"
         />
-        <Pargraph
+        <Paragraph
           at="Ourstory"
           idx={4}
           isEng={isEng}
@@ -62,7 +62,7 @@ export default async function OurStoryPage() {
         placeholder="blur"
         alt="greeny"
       />
-      <Pargraph
+      <Paragraph
         at="Ourstory"
         idx={6}
         isEng={isEng}

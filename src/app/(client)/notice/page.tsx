@@ -1,6 +1,6 @@
-import PageInfoSection from "@/components/PageInfoSection";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
+import PageInfoSection from "@/components/common/PageInfoSection";
+import Pagination from "@/components/common/Pagination";
+import Table from "@/components/notice/Table";
 import { NOTICE_PAGE_SIZE } from "@/libs/constants";
 import {
   getCachedAllNotices,
@@ -15,11 +15,10 @@ export const metadata: Metadata = {
   title: "Notice",
 };
 
-export default async function NoticePage({
-  searchParams,
-}: {
-  searchParams?: { page: string; keyword: string };
+export default async function NoticePage(props: {
+  searchParams?: Promise<{ page: string; keyword: string }>;
 }) {
+  const searchParams = await props.searchParams;
   const currPage = searchParams?.page ? Number(searchParams.page) : 1;
   if (currPage <= 0) redirect("/notice");
 

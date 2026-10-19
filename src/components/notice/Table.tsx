@@ -1,7 +1,7 @@
 "use client";
 
 import { Notices } from "@/libs/db-actions/notice";
-import moment from "moment";
+import moment from "moment-timezone";
 import { useRouter } from "next/navigation";
 
 export default function Table({ posts }: { posts: Notices }) {
@@ -36,7 +36,7 @@ export default function Table({ posts }: { posts: Notices }) {
                 {post.title}
               </td>
               <td className="bg-white text-right w-[20%] align-middle py-[0.7em] px-[2em]">
-                {moment(post.createdAt).format("YYYY-MM-DD")}
+                {moment(post.createdAt).tz("Asia/Seoul").format("YYYY-MM-DD")}
               </td>
             </tr>
           ))}

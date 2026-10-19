@@ -1,5 +1,5 @@
-import GoodDesignLogo from "@/components/GoodDesignLogo";
-import HomeParagraph from "@/components/HomeParagraph";
+import GoodDesignLogo from "@/components/home/GoodDesignLogo";
+import HomeParagraph from "@/components/home/HomeParagraph";
 import { getIsEng } from "@/libs/utils";
 
 export default async function Home() {

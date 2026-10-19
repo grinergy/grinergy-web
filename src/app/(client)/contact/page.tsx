@@ -1,5 +1,5 @@
-import ContactParagraph from "@/components/ContactParagraph";
-import InfoRow from "@/components/InfoRow";
+import ContactParagraph from "@/components/contact/ContactParagraph";
+import InfoRow from "@/components/contact/InfoRow";
 import { getIsEng } from "@/libs/utils";
 import { Metadata } from "next";
 

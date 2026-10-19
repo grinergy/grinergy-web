@@ -1,6 +1,6 @@
 import { cn } from "@/libs/utils";
 import Parser from "html-react-parser";
-import Pargraph from "./Pargraph";
+import Paragraph from "@/components/common/Paragraph";
 
 const energyData = [
   ["그린 에너지", "Green energy"],
@@ -88,7 +88,7 @@ export default function RoadMap({ isEng }: { isEng: boolean }) {
           />
         </div>
       </div>
-      <Pargraph
+      <Paragraph
         at="Ourstory"
         idx={5}
         isEng={isEng}

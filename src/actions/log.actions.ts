@@ -11,7 +11,7 @@ export const createLog = async (
   operationType: $Enums.OperationType,
   data: Object | null
 ) => {
-  const ipAddress = (headers().get("x-forwarded-for") ?? "127.0.0.1").split(
+  const ipAddress = ((await headers()).get("x-forwarded-for") ?? "127.0.0.1").split(
     ","
   )[0];
   await db.operationLog.create({

@@ -7,6 +7,12 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
 
+// javascript: 같은 위험한 스킴을 막는다. 스킴 없이 입력한 주소는 기존처럼 허용
+export const isSafeUrl = (url: string) => {
+  const scheme = url.trim().match(/^([a-z][a-z0-9+.-]*):/i)?.[1];
+  return !scheme || ["http", "https"].includes(scheme.toLowerCase());
+};
+
 export const getIsEng = async () => {
   const locale = await getLocale();
   return locale === "en";

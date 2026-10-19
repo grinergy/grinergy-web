@@ -1,5 +1,3 @@
-"use server";
-
 import { Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import {
@@ -10,26 +8,41 @@ import {
 } from "../constants";
 import db from "../db";
 
+const noticeSelect = {
+  id: true,
+  title: true,
+  createdAt: true,
+} satisfies Prisma.NoticeSelect;
+
+const adminNoticeSelect = {
+  id: true,
+  title: true,
+  contents: true,
+  createdAt: true,
+  isHidden: true,
+} satisfies Prisma.NoticeSelect;
+
+// 공개 페이지에서는 숨김 처리된 공지를 제외한다
+const visible = { isHidden: { not: true } } satisfies Prisma.NoticeWhereInput;
+
+const titleContains = (searchKeyword: string) =>
+  ({ title: { contains: searchKeyword } }) satisfies Prisma.NoticeWhereInput;
+
+const noticePage = (currPage: number) => ({
+  orderBy: { createdAt: "desc" } as const,
+  take: NOTICE_PAGE_SIZE,
+  skip: NOTICE_PAGE_SIZE * (currPage - 1),
+});
+
 /* Client */
 
 export async function getAllNotices(currPage: number) {
   if (currPage <= 0) return;
-  const data = await db.notice.findMany({
-    where: {
-      isHidden: { not: true },
-    },
-    select: {
-      id: true,
-      title: true,
-      createdAt: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: NOTICE_PAGE_SIZE,
-    skip: NOTICE_PAGE_SIZE * (currPage - 1),
+  return await db.notice.findMany({
+    where: visible,
+    select: noticeSelect,
+    ...noticePage(currPage),
   });
-  return data;
 }
 
 export async function getSearchedNotices(
@@ -37,25 +50,11 @@ export async function getSearchedNotices(
   searchKeyword: string
 ) {
   if (currPage <= 0) return;
-  const data = await db.notice.findMany({
-    select: {
-      id: true,
-      title: true,
-      createdAt: true,
-    },
-    where: {
-      isHidden: { not: true },
-      title: {
-        contains: searchKeyword,
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: NOTICE_PAGE_SIZE,
-    skip: NOTICE_PAGE_SIZE * (currPage - 1),
+  return await db.notice.findMany({
+    select: noticeSelect,
+    where: { ...visible, ...titleContains(searchKeyword) },
+    ...noticePage(currPage),
   });
-  return data;
 }
 
 export async function getCachedAllNotices(currPage: number) {
@@ -74,17 +73,12 @@ export async function getCachedAllNotices(currPage: number) {
 export type Notices = Prisma.PromiseReturnType<typeof getAllNotices>;
 
 export async function getTotalNoticeCount() {
-  return await db.notice.count({ where: { isHidden: { not: true } } });
+  return await db.notice.count({ where: visible });
 }
 
 export async function getSearchedNoticeCount(searchKeyword: string) {
   return await db.notice.count({
-    where: {
-      isHidden: { not: true },
-      title: {
-        contains: searchKeyword,
-      },
-    },
+    where: { ...visible, ...titleContains(searchKeyword) },
   });
 }
 
@@ -101,47 +95,21 @@ export const getCachedTotalNoticeCount = unstable_cache(
 
 export async function getAllNoticesForAdmin(currPage: number) {
   if (currPage <= 0) return;
-  const data = await db.notice.findMany({
-    select: {
-      id: true,
-      title: true,
-      contents: true,
-      createdAt: true,
-      isHidden: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: NOTICE_PAGE_SIZE,
-    skip: NOTICE_PAGE_SIZE * (currPage - 1),
+  return await db.notice.findMany({
+    select: adminNoticeSelect,
+    ...noticePage(currPage),
   });
-  return data;
 }
 
 export async function getSearchedNoticesForAdmin(
   currPage: number,
   searchKeyword: string
 ) {
-  const data = await db.notice.findMany({
-    select: {
-      id: true,
-      title: true,
-      contents: true,
-      createdAt: true,
-      isHidden: true,
-    },
-    where: {
-      title: {
-        contains: searchKeyword,
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: NOTICE_PAGE_SIZE,
-    skip: NOTICE_PAGE_SIZE * (currPage - 1),
+  return await db.notice.findMany({
+    select: adminNoticeSelect,
+    where: titleContains(searchKeyword),
+    ...noticePage(currPage),
   });
-  return data;
 }
 
 export async function getTotalNoticeCountForAdmin() {
@@ -149,12 +117,5 @@ export async function getTotalNoticeCountForAdmin() {
 }
 
 export async function getSearchedNoticeCountForAdmin(searchKeyword: string) {
-  return await db.notice.count({
-    where: {
-      title: {
-        contains: searchKeyword,
-      },
-    },
-  });
+  return await db.notice.count({ where: titleContains(searchKeyword) });
 }
-

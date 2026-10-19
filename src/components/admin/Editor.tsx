@@ -12,9 +12,9 @@ const fontWhiteList = [
 
 const ReactQuill = dynamic(
   () =>
-    import("react-quill").then((mod) => {
+    import("react-quill-new").then((mod) => {
       const Quill = mod.default.Quill;
-      const Font = Quill.import("formats/font");
+      const Font = Quill.import("formats/font") as any;
       Font.whitelist = fontWhiteList;
       Quill.register(Font, true);
 
@@ -105,7 +105,6 @@ export default function Editor({
     "align",
     "code",
     "list",
-    "bullet",
     "indent",
     "link",
     "image",
@@ -118,6 +117,8 @@ export default function Editor({
       onChange={onChange}
       modules={modules}
       formats={formats}
+      // 시맨틱 HTML은 공백을 &nbsp;로 저장하고 data-list를 제거해 목록 스타일이 깨짐
+      useSemanticHTML={false}
     />
   );
 }
