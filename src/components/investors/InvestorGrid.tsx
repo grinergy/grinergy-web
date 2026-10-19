@@ -13,20 +13,20 @@ const investorImgList = [
   "/images/investor9.png",
 ];
 
+// 부모 opacity를 늦게 올리면 그동안 앞쪽 로고 애니메이션이 안 보인 채 끝나므로, 부모는 그대로 두고 자식 시작만 늦춥니다.
 const list = {
-  hidden: { opacity: 0 },
+  hidden: {},
   show: {
-    opacity: 1,
     transition: {
-      delay: 1,
-      staggerChildren: 0.2,
+      delayChildren: 0.4,
+      staggerChildren: 0.15,
     },
   },
 };
 
 const item = {
   hidden: { opacity: 0, y: 50 },
-  show: { opacity: 1, y: 0, transition: { duration: 1 } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
 export default function InvestorGrid() {
