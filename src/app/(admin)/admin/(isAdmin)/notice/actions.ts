@@ -9,6 +9,7 @@ import { NOTICE_COUNT_TAG, NOTICE_TAG } from "@/libs/constants";
 import db from "@/libs/db";
 import { deleteOneFile, getFileNameFromKey } from "@/libs/file-storage";
 import handleError from "@/libs/error-handler";
+import { sendSlackNotification } from "@/libs/utils";
 import { File as PrismaFileObject } from "@prisma/client";
 import { updateTag } from "next/cache";
 import { noticeSchema, updateNoticeSchema } from "./schema";
@@ -158,23 +159,30 @@ export async function deleteNotice(noticeId: string) {
 
     if (!notice) throw new NotFoundException("공지사항 정보가 없습니다.");
 
-    const fileDeletionPromises = notice.files.map(async ({ fileKey }) => {
-      await deleteOneFile(fileKey);
-    });
-
+    // File은 onDelete: Cascade라 공지와 함께 지워진다
     await db.notice.delete({
       where: {
         id: notice.id,
       },
     });
 
-    // 모든 파일 삭제 작업이 완료될 때까지 기다림
-    await Promise.all(fileDeletionPromises);
-
     await createLog("NOTICE", noticeId, "DELETE", null);
 
     updateTag(NOTICE_TAG);
     updateTag(NOTICE_COUNT_TAG);
+
+    // 파일 삭제에 실패해도 공지 삭제는 유지하고, 남은 파일은 Slack으로 알림
+    const results = await Promise.allSettled(
+      notice.files.map(({ fileKey }) => deleteOneFile(fileKey))
+    );
+    const failedFileKeys = notice.files
+      .filter((_, i) => results[i].status === "rejected")
+      .map(({ fileKey }) => fileKey);
+    if (failedFileKeys.length > 0) {
+      await sendSlackNotification(
+        `공지 첨부파일 삭제 실패: ${failedFileKeys.join(", ")}`
+      );
+    }
   } catch (error) {
     return await handleError(error);
   }
