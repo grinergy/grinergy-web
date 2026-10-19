@@ -15,3 +15,6 @@ export const deleteOneFile = async (fileKey: string) => {
     throw new FileDeleteException();
   }
 };
+
+// fileKey는 `${Date.now()}_${fileName}` 형식 (getUploadUrl 참고)
+export const getFileNameFromKey = (fileKey: string) => fileKey.split("_")[1];

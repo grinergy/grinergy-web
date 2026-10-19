@@ -3,12 +3,94 @@
 import { assertAdmin } from "@/libs/auth";
 import { createLog } from "@/actions/log.actions";
 import NotFoundException from "@/exceptions/NotFoundException";
+import ValidationException from "@/exceptions/ValidationException";
 import { NEWS_COUNT_TAG, NEWS_TAG } from "@/libs/constants";
 import db from "@/libs/db";
 import { deleteOneFile } from "@/libs/file-storage";
 import handleError from "@/libs/error-handler";
 import { sendSlackNotification } from "@/libs/utils";
 import { updateTag } from "next/cache";
+import { newsSchema, updateNewsSchema } from "./schema";
+
+function getNewsFormData(formData: FormData) {
+  return {
+    photo: formData.get("photo"),
+    title: formData.get("title"),
+    url: formData.get("url"),
+    contents: formData.get("contents"),
+  };
+}
+
+export async function uploadNews(formData: FormData) {
+  try {
+    await assertAdmin();
+
+    const result = newsSchema.safeParse(getNewsFormData(formData));
+    if (!result.success) throw new ValidationException();
+    const { title, url, contents, photo } = result.data;
+    const { id } = await db.news.create({
+      data: {
+        title,
+        contents,
+        url,
+        photo,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    await createLog("NEWS", id, "CREATE", { title, url, contents, photo });
+
+    updateTag(NEWS_TAG);
+    updateTag(NEWS_COUNT_TAG);
+  } catch (error) {
+    return await handleError(error);
+  }
+}
+
+export const updateNews = async (newsId: string, formData: FormData) => {
+  try {
+    await assertAdmin();
+
+    const data = getNewsFormData(formData);
+
+    const news = await db.news.findUnique({
+      where: {
+        id: newsId,
+      },
+      select: {
+        photo: true,
+      },
+    });
+
+    if (!news) throw new NotFoundException("뉴스 정보가 없습니다.");
+
+    if (data.photo && news.photo) await deleteOneFile(news.photo);
+
+    const result = updateNewsSchema.safeParse(data);
+    if (!result.success) throw new ValidationException();
+    const { title, url, contents, photo } = result.data;
+
+    await db.news.update({
+      where: {
+        id: newsId,
+      },
+      data: {
+        title: title || undefined,
+        contents: contents || undefined,
+        url: url || undefined,
+        photo,
+      },
+    });
+
+    await createLog("NEWS", newsId, "UPDATE", { title, url, contents, photo });
+
+    updateTag(NEWS_TAG);
+  } catch (error) {
+    return await handleError(error);
+  }
+};
 
 export async function deleteNews(newsId: string) {
   try {

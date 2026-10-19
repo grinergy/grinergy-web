@@ -1,6 +1,6 @@
-import AdminTable from "@/components/AdminTable";
-import PageInfoSection from "@/components/PageInfoSection";
-import Pagination from "@/components/Pagination";
+import AdminTable from "@/components/admin/AdminTable";
+import PageInfoSection from "@/components/common/PageInfoSection";
+import Pagination from "@/components/common/Pagination";
 import { NEWS_PAGE_SIZE } from "@/libs/constants";
 
 import {

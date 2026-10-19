@@ -1,10 +1,10 @@
-import BigPhrase from "@/components/BigPhrase";
-import CircleModel from "@/components/CircleModel";
-import ComparisonGraph from "@/components/ComparisonGraph";
-import LtoInfoSection from "@/components/LtoInfoSection";
-import Pargraph from "@/components/Pargraph";
-import ProductExSection from "@/components/ProductExSection";
-import ProductImageSection from "@/components/ProductImageSection";
+import BigPhrase from "@/components/common/BigPhrase";
+import CircleModel from "@/components/product/CircleModel";
+import ComparisonGraph from "@/components/product/ComparisonGraph";
+import LtoInfoSection from "@/components/product/LtoInfoSection";
+import Paragraph from "@/components/common/Paragraph";
+import ProductExSection from "@/components/product/ProductExSection";
+import ProductImageSection from "@/components/product/ProductImageSection";
 import { cn, getIsEng } from "@/libs/utils";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -39,13 +39,13 @@ export default async function ProductPage() {
         alt="product 배너"
       />
 
-      <Pargraph at="Product" idx={1} isEng={isEng} />
+      <Paragraph at="Product" idx={1} isEng={isEng} />
       <ComparisonGraph isEng={isEng} />
       <ProductImageSection />
-      <Pargraph at="Product" idx={2} isEng={isEng} />
+      <Paragraph at="Product" idx={2} isEng={isEng} />
       <CircleModel isEng={isEng} />
       <LtoInfoSection isEng={isEng} />
-      <Pargraph
+      <Paragraph
         at="Product"
         idx={3}
         isEng={isEng}

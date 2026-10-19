@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import {
   NEWS_COUNT_TAG,
@@ -7,48 +8,46 @@ import {
 } from "../constants";
 import db from "../db";
 
+const newsSelect = {
+  id: true,
+  title: true,
+  contents: true,
+  url: true,
+  photo: true,
+} satisfies Prisma.NewsSelect;
+
+const adminNewsSelect = {
+  id: true,
+  title: true,
+  contents: true,
+  createdAt: true,
+} satisfies Prisma.NewsSelect;
+
+const titleContains = (searchKeyword: string) =>
+  ({ title: { contains: searchKeyword } }) satisfies Prisma.NewsWhereInput;
+
+const newsPage = (currPage: number) => ({
+  orderBy: { createdAt: "desc" } as const,
+  take: NEWS_PAGE_SIZE,
+  skip: NEWS_PAGE_SIZE * (currPage - 1),
+});
+
 /* Client */
 export async function getAllNews(currPage: number) {
   if (currPage <= 0) return;
-  const data = await db.news.findMany({
-    select: {
-      id: true,
-      title: true,
-      contents: true,
-      url: true,
-      photo: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: NEWS_PAGE_SIZE,
-    skip: NEWS_PAGE_SIZE * (currPage - 1),
+  return await db.news.findMany({
+    select: newsSelect,
+    ...newsPage(currPage),
   });
-  return data;
 }
 
 export async function getSearchedNews(currPage: number, searchKeyword: string) {
   if (currPage <= 0) return;
-  const data = await db.news.findMany({
-    select: {
-      id: true,
-      title: true,
-      contents: true,
-      url: true,
-      photo: true,
-    },
-    where: {
-      title: {
-        contains: searchKeyword,
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: NEWS_PAGE_SIZE,
-    skip: NEWS_PAGE_SIZE * (currPage - 1),
+  return await db.news.findMany({
+    select: newsSelect,
+    where: titleContains(searchKeyword),
+    ...newsPage(currPage),
   });
-  return data;
 }
 
 export async function getCachedAllNews(currPage: number) {
@@ -69,13 +68,7 @@ export async function getTotalNewsCount() {
 }
 
 export async function getSearchedNewsCount(searchKeyword: string) {
-  return await db.news.count({
-    where: {
-      title: {
-        contains: searchKeyword,
-      },
-    },
-  });
+  return await db.news.count({ where: titleContains(searchKeyword) });
 }
 
 export const getCachedTotalNewsCount = unstable_cache(
@@ -90,43 +83,19 @@ export const getCachedTotalNewsCount = unstable_cache(
 /* Admin */
 
 export async function getAllNewsForAdmin(currPage: number) {
-  const data = await db.news.findMany({
-    select: {
-      id: true,
-      title: true,
-      contents: true,
-      createdAt: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: NEWS_PAGE_SIZE,
-    skip: NEWS_PAGE_SIZE * (currPage - 1),
+  return await db.news.findMany({
+    select: adminNewsSelect,
+    ...newsPage(currPage),
   });
-  return data;
 }
 
 export async function getSearchedNewsForAdmin(
   currPage: number,
   searchKeyword: string
 ) {
-  const data = await db.news.findMany({
-    select: {
-      id: true,
-      title: true,
-      contents: true,
-      createdAt: true,
-    },
-    where: {
-      title: {
-        contains: searchKeyword,
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: NEWS_PAGE_SIZE,
-    skip: NEWS_PAGE_SIZE * (currPage - 1),
+  return await db.news.findMany({
+    select: adminNewsSelect,
+    where: titleContains(searchKeyword),
+    ...newsPage(currPage),
   });
-  return data;
 }

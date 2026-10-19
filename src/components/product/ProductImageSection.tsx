@@ -1,8 +1,8 @@
 import Image from "next/image";
 
-import image1 from "../../public/images/product_battery.jpg";
-import image2 from "../../public/images/product_leftimg.jpg";
-import image3 from "../../public/images/product_rightimg.jpg";
+import image1 from "../../../public/images/product_battery.jpg";
+import image2 from "../../../public/images/product_leftimg.jpg";
+import image3 from "../../../public/images/product_rightimg.jpg";
 import ProductImageCircle from "./ProductImageCircle";
 
 export default function ProductImageSection() {

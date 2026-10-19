@@ -1,5 +1,5 @@
 import { getIsAdmin } from "@/app/actions";
-import FileDownload from "@/components/FileDownload";
+import FileDownload from "@/components/notice/FileDownload";
 import db from "@/libs/db";
 import DOMPurify from "dompurify";
 import { JSDOM } from "jsdom";

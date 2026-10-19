@@ -1,6 +1,6 @@
-import PageInfoSection from "@/components/PageInfoSection";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
+import PageInfoSection from "@/components/common/PageInfoSection";
+import Pagination from "@/components/common/Pagination";
+import Table from "@/components/notice/Table";
 import { NOTICE_PAGE_SIZE } from "@/libs/constants";
 import {
   getCachedAllNotices,

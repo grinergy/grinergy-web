@@ -1,7 +1,7 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
 
-import PageTransition from "@/components/PageTransition";
+import PageTransition from "@/components/layout/PageTransition";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { getIsAdmin } from "../actions";

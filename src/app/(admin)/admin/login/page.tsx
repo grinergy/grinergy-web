@@ -1,6 +1,6 @@
 "use client";
 
-import LoginButton from "@/components/LoginButton";
+import LoginButton from "@/components/admin/LoginButton";
 import { useActionState } from "react";
 import { login } from "./actions";
 

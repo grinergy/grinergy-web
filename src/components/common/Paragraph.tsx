@@ -4,14 +4,14 @@ import useIsMobile from "@/hooks/useIsMobile";
 import { cn } from "@/libs/utils";
 import { useTranslations } from "next-intl";
 
-interface PargraphProps {
+interface ParagraphProps {
   at: "Ourstory" | "Product";
   idx: number;
   isEng: boolean;
   className?: string;
 }
 
-export default function Pargraph({ at, idx, isEng, className }: PargraphProps) {
+export default function Paragraph({ at, idx, isEng, className }: ParagraphProps) {
   const isMobile = useIsMobile();
   const t = useTranslations(at);
   return (

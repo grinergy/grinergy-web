@@ -1,4 +1,4 @@
-import SEO from "@/components/SEO";
+import SEO from "@/components/layout/SEO";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";

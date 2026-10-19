@@ -2,10 +2,10 @@ import { cn } from "@/libs/utils";
 import { useTranslations } from "next-intl";
 
 import Image, { StaticImageData } from "next/image";
-import img1 from "../../public/images/lto1.jpg";
-import img2 from "../../public/images/lto2.jpg";
-import img3 from "../../public/images/lto3.jpg";
-import img4 from "../../public/images/lto4.jpg";
+import img1 from "../../../public/images/lto1.jpg";
+import img2 from "../../../public/images/lto2.jpg";
+import img3 from "../../../public/images/lto3.jpg";
+import img4 from "../../../public/images/lto4.jpg";
 import LtoInfoSectionText from "./LtoInfoSectionText";
 
 export interface LtoInfoItem {

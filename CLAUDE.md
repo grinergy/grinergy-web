@@ -23,14 +23,17 @@ Grinergy는 친환경·에너지 혁신 기업의 Next.js 웹사이트입니다.
 - `src/app`: 라우트와 페이지 로직
   - `(client)`: 공개 페이지 (Home, About, Product, Investors, News, Notice)
   - `(admin)/admin`: 어드민 대시보드. `(isAdmin)` 그룹의 `layout.tsx`에서 `getIsAdmin()`으로 접근을 막고, 미인증 시 `/admin/login`으로 리다이렉트
+    - `news/`, `notice/`: 각 기능의 `actions.ts`(생성·수정·삭제 Server Action), `schema.ts`(생성·수정 Zod 스키마), `_components/`(생성·수정 공용 폼)를 한곳에 둡니다. `create`·`update` 페이지는 폼만 렌더링합니다.
   - `api`: `news/[newsId]`, `notice/[noticeId]`, `download` 라우트 핸들러
   - `actions.ts`: `getIsAdmin()` 등 공용 Server Action
-- `src/actions`: `log.actions.ts` (OperationLog 기록)
-- `src/components`: 재사용 UI 컴포넌트
+- `src/actions`: `log.actions.ts` (OperationLog 기록), `file.actions.ts` (R2 업로드 URL 발급, 공개 이미지 주소)
+- `src/components`: UI 컴포넌트. `admin/`, `layout/`, `common/`(여러 페이지 공용), 그리고 페이지별 폴더(`home/`, `about/`, `product/`, `contact/`, `investors/`, `notice/`)로 나눕니다.
 - `src/exceptions`: 커스텀 예외 클래스 (`GlobalException` 및 하위 클래스)
 - `src/hooks`: 커스텀 훅
 - `src/libs`: 핵심 로직과 유틸리티
-  - `db-actions/`: News, Notice, File DB 조회·변경 함수
+  - `db-actions/`: News, Notice DB 조회 함수
+  - `file-storage.ts`: R2 파일 삭제 등 서버 전용 파일 유틸 (`"use server"` 아님)
+  - `r2-upload.ts`: 브라우저에서 presigned URL로 R2에 업로드하는 클라이언트 헬퍼
   - `db.ts`: Prisma 클라이언트
   - `s3-client.ts`: Cloudflare R2용 S3 클라이언트
   - `error-handler.ts`: 공통 에러 처리 (`handleError`)

@@ -1,4 +1,4 @@
-import InvestorGrid from "@/components/InvestorGrid";
+import InvestorGrid from "@/components/investors/InvestorGrid";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

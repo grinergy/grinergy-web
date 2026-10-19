@@ -1,5 +1,5 @@
-import PageInfoSection from "@/components/PageInfoSection";
-import Pagination from "@/components/Pagination";
+import PageInfoSection from "@/components/common/PageInfoSection";
+import Pagination from "@/components/common/Pagination";
 import { NEWS_PAGE_SIZE } from "@/libs/constants";
 import {
   getCachedAllNews,
