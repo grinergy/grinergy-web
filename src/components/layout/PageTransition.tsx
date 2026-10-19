@@ -1,13 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
-
-const variants = {
-  hidden: { opacity: 0, y: 50 },
-  enter: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -50 },
-};
 
 export default function PageTransition({
   children,
@@ -15,19 +9,17 @@ export default function PageTransition({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  // 메인의 absolute 영상·문구가 transform 기준으로 배치되다가 애니메이션이 끝나면 위치가 튀므로, 메인은 opacity만 바꿉니다.
+  const isHome = pathname === "/";
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={pathname}
-        initial="hidden"
-        animate="enter"
-        exit="exit"
-        variants={variants}
-        transition={{ duration: 0.4 }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      key={pathname}
+      initial={{ opacity: 0, y: isHome ? 0 : 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      {children}
+    </motion.div>
   );
 }
