@@ -2,7 +2,7 @@
 
 import Editor from "@/components/Editor";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useForm } from "react-hook-form";
 
 import FileUploadException from "@/exceptions/FileUploadException";
@@ -29,11 +29,11 @@ interface NoticeDetail {
   createdAt: string;
 }
 
-export default function UpdateNoticePage({
-  params: { noticeId },
-}: {
-  params: { noticeId: string };
+export default function UpdateNoticePage(props: {
+  params: Promise<{ noticeId: string }>;
 }) {
+  const { noticeId } = use(props.params);
+
   const router = useRouter();
   const labelCss = "text-[0.8rem] lg:text-[0.9375rem] font-kr";
   const [uploadFiles, setUploadFiles] = useState<FileList | null>(null);

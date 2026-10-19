@@ -6,7 +6,7 @@ import { NEWS_COUNT_TAG, NEWS_TAG } from "@/libs/constants";
 import db from "@/libs/db";
 import { deleteOneFile } from "@/libs/db-actions/file";
 import handleError from "@/libs/error-handler";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 export async function deleteNews(newsId: string) {
   try {
@@ -31,8 +31,8 @@ export async function deleteNews(newsId: string) {
 
     await createLog("NEWS", newsId, "DELETE", null);
 
-    revalidateTag(NEWS_TAG);
-    revalidateTag(NEWS_COUNT_TAG);
+    updateTag(NEWS_TAG);
+    updateTag(NEWS_COUNT_TAG);
   } catch (error) {
     return await handleError(error);
   }

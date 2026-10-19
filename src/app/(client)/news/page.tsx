@@ -16,11 +16,10 @@ export const metadata: Metadata = {
   title: "News",
 };
 
-export default async function NewsPage({
-  searchParams,
-}: {
-  searchParams?: { page: string; keyword: string };
+export default async function NewsPage(props: {
+  searchParams?: Promise<{ page: string; keyword: string }>;
 }) {
+  const searchParams = await props.searchParams;
   const currPage = searchParams?.page ? Number(searchParams.page) : 1;
   if (currPage <= 0) redirect("/news");
 

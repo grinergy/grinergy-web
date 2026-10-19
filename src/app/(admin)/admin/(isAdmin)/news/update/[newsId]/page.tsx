@@ -2,7 +2,7 @@
 
 import Editor from "@/components/Editor";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useForm } from "react-hook-form";
 
 import FileUploadException from "@/exceptions/FileUploadException";
@@ -16,11 +16,11 @@ import toast from "react-hot-toast";
 import { getR2ImagePath, updateNews } from "./actions";
 import { UpdateNewsDto, updateNewsSchema } from "./schema";
 
-export default function UpdateNewsPage({
-  params: { newsId },
-}: {
-  params: { newsId: string };
+export default function UpdateNewsPage(props: {
+  params: Promise<{ newsId: string }>;
 }) {
+  const { newsId } = use(props.params);
+
   const router = useRouter();
   const labelCss = "text-[0.8rem] lg:text-[0.9375rem] font-kr";
   const [previewImage, setPreviewImage] = useState<string>("");

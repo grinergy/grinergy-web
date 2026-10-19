@@ -6,7 +6,7 @@ import { NOTICE_COUNT_TAG, NOTICE_TAG } from "@/libs/constants";
 import db from "@/libs/db";
 import { deleteOneFile } from "@/libs/db-actions/file";
 import handleError from "@/libs/error-handler";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 export async function deleteNotice(noticeId: string) {
   try {
@@ -41,8 +41,8 @@ export async function deleteNotice(noticeId: string) {
 
     await createLog("NOTICE", noticeId, "DELETE", null);
 
-    revalidateTag(NOTICE_TAG);
-    revalidateTag(NOTICE_COUNT_TAG);
+    updateTag(NOTICE_TAG);
+    updateTag(NOTICE_COUNT_TAG);
   } catch (error) {
     return await handleError(error);
   }
@@ -57,8 +57,8 @@ export async function toggleNoticeVisibility(noticeId: string, isHidden: boolean
 
     await createLog("NOTICE", noticeId, "UPDATE", { isHidden: !isHidden });
 
-    revalidateTag(NOTICE_TAG);
-    revalidateTag(NOTICE_COUNT_TAG);
+    updateTag(NOTICE_TAG);
+    updateTag(NOTICE_COUNT_TAG);
   } catch (error) {
     return await handleError(error);
   }

@@ -10,7 +10,7 @@ import ValidationException from "@/exceptions/ValidationException";
 import { deleteOneFile } from "@/libs/db-actions/file";
 import handleError from "@/libs/error-handler";
 import { File as PrismaFileObject } from "@prisma/client";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { updateNoticeSchema } from "./schema";
 
 export const updateNotice = async (noticeId: string, formData: FormData) => {
@@ -85,7 +85,7 @@ export const updateNotice = async (noticeId: string, formData: FormData) => {
       deletedFiles,
     });
 
-    revalidateTag(NOTICE_TAG);
+    updateTag(NOTICE_TAG);
   } catch (error) {
     return await handleError(error);
   }

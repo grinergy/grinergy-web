@@ -1,10 +1,9 @@
 import db from "@/libs/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  { params: { noticeId } }: { params: { noticeId: string } }
-) {
+export async function GET(req: NextRequest, props: { params: Promise<{ noticeId: string }> }) {
+  const { noticeId } = await props.params;
+
   try {
     const findNotice = await db.notice.findUnique({
       where: {

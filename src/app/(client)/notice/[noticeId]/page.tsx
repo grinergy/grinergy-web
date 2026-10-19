@@ -11,11 +11,11 @@ export const metadata: Metadata = {
   title: "Notice Detail",
 };
 
-export default async function NoticeDetailPage({
-  params: { noticeId },
-}: {
-  params: { noticeId: string };
+export default async function NoticeDetailPage(props: {
+  params: Promise<{ noticeId: string }>;
 }) {
+  const { noticeId } = await props.params;
+
   const data = await db.notice.findUnique({
     where: {
       id: noticeId,

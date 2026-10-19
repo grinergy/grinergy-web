@@ -31,7 +31,7 @@ export const login = async (prevState: any, formData: FormData) => {
     algorithm: "HS256",
   });
 
-  cookies().set("token", token, {
+  (await cookies()).set("token", token, {
     httpOnly: true,
     secure: false,
     maxAge: 259200, // 3d
@@ -41,6 +41,6 @@ export const login = async (prevState: any, formData: FormData) => {
 };
 
 export const logout = async () => {
-  cookies().delete("token");
+  (await cookies()).delete("token");
   redirect("/admin/login");
 };

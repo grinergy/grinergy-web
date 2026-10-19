@@ -7,7 +7,7 @@ import { NEWS_TAG } from "@/libs/constants";
 import db from "@/libs/db";
 import { deleteOneFile } from "@/libs/db-actions/file";
 import handleError from "@/libs/error-handler";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { updateNewsSchema } from "./schema";
 
 export const getR2ImagePath = async (fileKey: string) => {
@@ -54,7 +54,7 @@ export const updateNews = async (newsId: string, formData: FormData) => {
 
     await createLog("NEWS", newsId, "UPDATE", { title, url, contents, photo });
 
-    revalidateTag(NEWS_TAG);
+    updateTag(NEWS_TAG);
   } catch (error) {
     return await handleError(error);
   }

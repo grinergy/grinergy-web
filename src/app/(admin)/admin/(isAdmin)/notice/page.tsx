@@ -10,11 +10,10 @@ import {
 } from "@/libs/db-actions/notice";
 import { redirect } from "next/navigation";
 
-export default async function AdminNoticePage({
-  searchParams,
-}: {
-  searchParams?: { page: string; keyword: string };
+export default async function AdminNoticePage(props: {
+  searchParams?: Promise<{ page: string; keyword: string }>;
 }) {
+  const searchParams = await props.searchParams;
   const currPage = searchParams?.page ? Number(searchParams.page) : 1;
   if (currPage <= 0) redirect("/admin/notice");
 

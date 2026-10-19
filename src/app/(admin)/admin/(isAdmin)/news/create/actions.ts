@@ -5,7 +5,7 @@ import ValidationException from "@/exceptions/ValidationException";
 import { NEWS_COUNT_TAG, NEWS_TAG } from "@/libs/constants";
 import db from "@/libs/db";
 import handleError from "@/libs/error-handler";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { newsSchema } from "./schema";
 
 export async function uploadNews(formData: FormData) {
@@ -34,8 +34,8 @@ export async function uploadNews(formData: FormData) {
 
     await createLog("NEWS", id, "CREATE", { title, url, contents, photo });
 
-    revalidateTag(NEWS_TAG);
-    revalidateTag(NEWS_COUNT_TAG);
+    updateTag(NEWS_TAG);
+    updateTag(NEWS_COUNT_TAG);
   } catch (error) {
     return await handleError(error);
   }

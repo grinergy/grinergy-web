@@ -1,11 +1,11 @@
 "use client";
 
 import LoginButton from "@/components/LoginButton";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { login } from "./actions";
 
 export default function AdminLoginPage() {
-  const [state, action] = useFormState(login, null);
+  const [state, action] = useActionState(login, null);
   return (
     <div className="mt-[16.55vh] w-full">
       <h1 className="text-[10vw] lg:text-[3vw] text-center font-bold font-en mb-[1.5625rem]">

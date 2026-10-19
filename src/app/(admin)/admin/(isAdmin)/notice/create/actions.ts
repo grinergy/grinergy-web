@@ -6,7 +6,7 @@ import { NOTICE_COUNT_TAG, NOTICE_TAG } from "@/libs/constants";
 import db from "@/libs/db";
 import handleError from "@/libs/error-handler";
 import { File as PrismaFileObject } from "@prisma/client";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { noticeSchema } from "./schema";
 
 export async function uploadNotice(formData: FormData) {
@@ -46,8 +46,8 @@ export async function uploadNotice(formData: FormData) {
 
     await createLog("NOTICE", notice.id, "CREATE", { title, contents, files });
 
-    revalidateTag(NOTICE_TAG);
-    revalidateTag(NOTICE_COUNT_TAG);
+    updateTag(NOTICE_TAG);
+    updateTag(NOTICE_COUNT_TAG);
   } catch (error) {
     return await handleError(error);
   }

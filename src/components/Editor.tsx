@@ -12,9 +12,9 @@ const fontWhiteList = [
 
 const ReactQuill = dynamic(
   () =>
-    import("react-quill").then((mod) => {
+    import("react-quill-new").then((mod) => {
       const Quill = mod.default.Quill;
-      const Font = Quill.import("formats/font");
+      const Font = Quill.import("formats/font") as any;
       Font.whitelist = fontWhiteList;
       Quill.register(Font, true);
 
@@ -105,7 +105,6 @@ export default function Editor({
     "align",
     "code",
     "list",
-    "bullet",
     "indent",
     "link",
     "image",
