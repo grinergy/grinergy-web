@@ -1,3 +1,4 @@
+import { getIsAdmin } from "@/app/actions";
 import FileDownload from "@/components/FileDownload";
 import db from "@/libs/db";
 import DOMPurify from "dompurify";
@@ -25,7 +26,8 @@ export default async function NoticeDetailPage(props: {
     },
   });
 
-  if (!data) notFound();
+  // 숨긴 공지는 어드민만 볼 수 있다 (어드민 목록에서 미리보기로 사용)
+  if (!data || (data.isHidden && !(await getIsAdmin()))) notFound();
 
   return (
     <div className="w-full lg:w-1/2 font-kr overflow-hidden mx-auto">

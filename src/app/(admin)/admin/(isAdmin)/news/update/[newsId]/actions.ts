@@ -1,11 +1,12 @@
 "use server";
 
+import { assertAdmin } from "@/libs/auth";
 import { createLog } from "@/actions/log.actions";
 import NotFoundException from "@/exceptions/NotFoundException";
 import ValidationException from "@/exceptions/ValidationException";
 import { NEWS_TAG } from "@/libs/constants";
 import db from "@/libs/db";
-import { deleteOneFile } from "@/libs/db-actions/file";
+import { deleteOneFile } from "@/libs/file-storage";
 import handleError from "@/libs/error-handler";
 import { updateTag } from "next/cache";
 import { updateNewsSchema } from "./schema";
@@ -16,6 +17,8 @@ export const getR2ImagePath = async (fileKey: string) => {
 
 export const updateNews = async (newsId: string, formData: FormData) => {
   try {
+    await assertAdmin();
+
     const data = {
       photo: formData.get("photo"),
       title: formData.get("title"),

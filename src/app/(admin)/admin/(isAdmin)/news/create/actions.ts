@@ -1,5 +1,6 @@
 "use server";
 
+import { assertAdmin } from "@/libs/auth";
 import { createLog } from "@/actions/log.actions";
 import ValidationException from "@/exceptions/ValidationException";
 import { NEWS_COUNT_TAG, NEWS_TAG } from "@/libs/constants";
@@ -10,6 +11,8 @@ import { newsSchema } from "./schema";
 
 export async function uploadNews(formData: FormData) {
   try {
+    await assertAdmin();
+
     const data = {
       photo: formData.get("photo"),
       title: formData.get("title"),

@@ -1,12 +1,14 @@
 "use server";
 
-import FileDeleteException from "@/exceptions/FileDeleteException";
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { assertAdmin } from "@/libs/auth";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import path from "path";
 import s3Client from "../s3-client";
 
 export async function getUploadUrl(fileName: string, fileType: string) {
+  await assertAdmin();
+
   const fileKey = `${Date.now()}_${path.basename(fileName)}`;
   const command = new PutObjectCommand({
     Bucket: process.env.R2_BUCKET_NAME,
@@ -52,16 +54,3 @@ export async function getUploadUrl(fileName: string, fileType: string) {
 //     throw new FileUploadException(`클라우드 업로드 실패. 파일명: ${file.name}`);
 //   }
 // };
-
-export const deleteOneFile = async (fileKey: string) => {
-  try {
-    await s3Client.send(
-      new DeleteObjectCommand({
-        Bucket: process.env.R2_BUCKET_NAME as string,
-        Key: fileKey,
-      })
-    );
-  } catch (error) {
-    throw new FileDeleteException();
-  }
-};

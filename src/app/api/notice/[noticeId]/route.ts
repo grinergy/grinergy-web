@@ -1,3 +1,4 @@
+import { getIsAdmin } from "@/app/actions";
 import db from "@/libs/db";
 import handleError from "@/libs/error-handler";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,16 +16,18 @@ export async function GET(req: NextRequest, props: { params: Promise<{ noticeId:
         contents: true,
         files: true,
         createdAt: true,
+        isHidden: true,
       },
     });
 
-    if (!findNotice) {
+    if (!findNotice || (findNotice.isHidden && !(await getIsAdmin()))) {
       return NextResponse.json("공지사항 정보가 없습니다.", {
         status: 404,
       });
     }
 
-    return NextResponse.json(findNotice);
+    const { isHidden, ...notice } = findNotice;
+    return NextResponse.json(notice);
   } catch (error) {
     await handleError(error);
     return NextResponse.json(

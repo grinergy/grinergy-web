@@ -1,5 +1,6 @@
 "use server";
 
+import { assertAdmin } from "@/libs/auth";
 import FileDeleteException from "@/exceptions/FileDeleteException";
 import NotFoundException from "@/exceptions/NotFoundException";
 import { NOTICE_TAG } from "@/libs/constants";
@@ -7,7 +8,7 @@ import db from "@/libs/db";
 
 import { createLog } from "@/actions/log.actions";
 import ValidationException from "@/exceptions/ValidationException";
-import { deleteOneFile } from "@/libs/db-actions/file";
+import { deleteOneFile } from "@/libs/file-storage";
 import handleError from "@/libs/error-handler";
 import { File as PrismaFileObject } from "@prisma/client";
 import { updateTag } from "next/cache";
@@ -15,6 +16,8 @@ import { updateNoticeSchema } from "./schema";
 
 export const updateNotice = async (noticeId: string, formData: FormData) => {
   try {
+    await assertAdmin();
+
     const data = {
       title: formData.get("title"),
       contents: formData.get("contents"),
@@ -38,6 +41,11 @@ export const updateNotice = async (noticeId: string, formData: FormData) => {
     if (!result.success) throw new ValidationException();
 
     const { title, contents, createdAt, files, deletedFiles } = result.data;
+
+    // 이 공지에 붙은 파일만 지울 수 있게 한다
+    const ownFileKeys = new Set(notice.files.map(({ fileKey }) => fileKey));
+    if (deletedFiles?.some((fileKey) => !ownFileKeys.has(fileKey)))
+      throw new ValidationException();
 
     try {
       deletedFiles?.forEach(async (deletedFileKey) => {

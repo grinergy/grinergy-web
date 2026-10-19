@@ -1,5 +1,6 @@
 "use server";
 
+import { assertAdmin } from "@/libs/auth";
 import { createLog } from "@/actions/log.actions";
 import ValidationException from "@/exceptions/ValidationException";
 import { NOTICE_COUNT_TAG, NOTICE_TAG } from "@/libs/constants";
@@ -11,6 +12,8 @@ import { noticeSchema } from "./schema";
 
 export async function uploadNotice(formData: FormData) {
   try {
+    await assertAdmin();
+
     const data = {
       files: formData.getAll("files"),
       title: formData.get("title"),

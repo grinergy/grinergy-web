@@ -1,16 +1,19 @@
 "use server";
 
+import { assertAdmin } from "@/libs/auth";
 import { createLog } from "@/actions/log.actions";
 import NotFoundException from "@/exceptions/NotFoundException";
 import { NEWS_COUNT_TAG, NEWS_TAG } from "@/libs/constants";
 import db from "@/libs/db";
-import { deleteOneFile } from "@/libs/db-actions/file";
+import { deleteOneFile } from "@/libs/file-storage";
 import handleError from "@/libs/error-handler";
 import { sendSlackNotification } from "@/libs/utils";
 import { updateTag } from "next/cache";
 
 export async function deleteNews(newsId: string) {
   try {
+    await assertAdmin();
+
     const news = await db.news.findUnique({
       where: {
         id: newsId,

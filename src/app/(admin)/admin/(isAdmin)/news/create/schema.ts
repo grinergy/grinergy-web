@@ -1,3 +1,4 @@
+import { isSafeUrl } from "@/libs/utils";
 import { z } from "zod";
 
 export const newsSchema = z.object({
@@ -15,7 +16,8 @@ export const newsSchema = z.object({
     })
     .min(1, {
       message: "URL을 입력해주세요",
-    }),
+    })
+    .refine(isSafeUrl, { message: "http 또는 https 주소만 입력할 수 있습니다." }),
   contents: z
     .string({
       required_error: "내용은 필수입니다.",
