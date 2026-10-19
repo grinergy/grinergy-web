@@ -66,8 +66,6 @@ export const updateNews = async (newsId: string, formData: FormData) => {
 
     if (!news) throw new NotFoundException("뉴스 정보가 없습니다.");
 
-    if (data.photo && news.photo) await deleteOneFile(news.photo);
-
     const result = updateNewsSchema.safeParse(data);
     if (!result.success) throw new ValidationException();
     const { title, url, contents, photo } = result.data;
@@ -87,6 +85,15 @@ export const updateNews = async (newsId: string, formData: FormData) => {
     await createLog("NEWS", newsId, "UPDATE", { title, url, contents, photo });
 
     updateTag(NEWS_TAG);
+
+    // 수정이 반영된 뒤에 이전 이미지를 지운다. 실패해도 수정은 유지하고 Slack으로 알림
+    if (photo && news.photo) {
+      try {
+        await deleteOneFile(news.photo);
+      } catch {
+        await sendSlackNotification(`뉴스 이미지 삭제 실패: ${news.photo}`);
+      }
+    }
   } catch (error) {
     return await handleError(error);
   }
