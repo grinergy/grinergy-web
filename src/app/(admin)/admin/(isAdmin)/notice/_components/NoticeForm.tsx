@@ -99,9 +99,8 @@ export default function NoticeForm({
           formData.append("files", uploadFilesData[i].fileKey);
         }
       } catch (error) {
-        return toastUploadError(error);
-      } finally {
         setIsLoading(false);
+        return toastUploadError(error);
       }
     }
 

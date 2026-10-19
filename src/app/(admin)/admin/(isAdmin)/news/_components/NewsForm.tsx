@@ -80,9 +80,8 @@ export default function NewsForm({
         await uploadToR2(photo, uploadUrl, abort);
         formData.append("photo", fileKey);
       } catch (error) {
-        return toastUploadError(error);
-      } finally {
         setIsLoading(false);
+        return toastUploadError(error);
       }
     }
 
