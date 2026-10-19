@@ -98,7 +98,7 @@ export const updateNotice = async (noticeId: string, formData: FormData) => {
       throw new ValidationException();
 
     try {
-      deletedFiles?.forEach(async (deletedFileKey) => {
+      for (const deletedFileKey of deletedFiles ?? []) {
         await deleteOneFile(deletedFileKey);
         await db.file.delete({
           where: {
@@ -106,7 +106,7 @@ export const updateNotice = async (noticeId: string, formData: FormData) => {
             fileKey: deletedFileKey,
           },
         });
-      });
+      }
     } catch (error) {
       throw new FileDeleteException();
     }
