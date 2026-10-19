@@ -2,11 +2,6 @@ import FileUploadException from "@/exceptions/FileUploadException";
 import GlobalException from "@/exceptions/GlobalException";
 import toast from "react-hot-toast";
 
-export interface UploadFileData {
-  uploadUrl: string;
-  fileKey: string;
-}
-
 // getUploadUrl로 받은 presigned URL에 브라우저에서 바로 파일을 올린다
 // 파일마다 업로드를 시작한 시점부터 60초가 지나면 중단한다
 export async function uploadToR2(file: File, uploadUrl: string) {

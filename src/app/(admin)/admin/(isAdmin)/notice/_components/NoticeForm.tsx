@@ -7,7 +7,7 @@ import {
   labelCss,
   SubmitButton,
 } from "@/components/admin/FormControls";
-import { toastUploadError, UploadFileData, uploadToR2 } from "@/libs/r2-upload";
+import { toastUploadError, uploadToR2 } from "@/libs/r2-upload";
 import { getErrorMessage } from "@/libs/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import moment from "moment-timezone";
@@ -40,7 +40,6 @@ export default function NoticeForm({
 }) {
   const isUpdate = !!notice;
   const [uploadFiles, setUploadFiles] = useState<FileList | null>(null);
-  const [uploadFilesData, setUploadFilesData] = useState<UploadFileData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
@@ -60,17 +59,12 @@ export default function NoticeForm({
     trigger("contents");
   }
 
-  async function onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const {
       target: { files },
     } = event;
     if (!files) return;
     setUploadFiles(files);
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const [uploadUrl, fileKey] = await getUploadUrl(file.name, file.type);
-      setUploadFilesData((prev) => [...prev, { uploadUrl, fileKey }]);
-    }
   }
 
   const onSubmit = async (data: UpdateNoticeDto) => {
@@ -92,9 +86,11 @@ export default function NoticeForm({
 
     if (uploadFiles) {
       try {
-        for (let i = 0; i < uploadFiles.length; i++) {
-          await uploadToR2(uploadFiles[i], uploadFilesData[i].uploadUrl);
-          formData.append("files", uploadFilesData[i].fileKey);
+        // 업로드 URL은 제출할 때 발급해, 파일을 다시 골라도 이전 선택의 URL이 섞이지 않게 한다
+        for (const file of Array.from(uploadFiles)) {
+          const [uploadUrl, fileKey] = await getUploadUrl(file.name, file.type);
+          await uploadToR2(file, uploadUrl);
+          formData.append("files", fileKey);
         }
       } catch (error) {
         setIsLoading(false);
