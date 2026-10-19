@@ -1,6 +1,5 @@
 import FileUploadException from "@/exceptions/FileUploadException";
 import GlobalException from "@/exceptions/GlobalException";
-import useAbortController from "@/hooks/useAbortController";
 import toast from "react-hot-toast";
 
 export interface UploadFileData {
@@ -9,20 +8,26 @@ export interface UploadFileData {
 }
 
 // getUploadUrl로 받은 presigned URL에 브라우저에서 바로 파일을 올린다
-export async function uploadToR2(
-  file: File,
-  uploadUrl: string,
-  { controller, timeoutId }: ReturnType<typeof useAbortController>
-) {
-  const response = await fetch(uploadUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Type": file.type,
-    },
-    body: Buffer.from(await file.arrayBuffer()),
-    signal: controller.signal,
-  });
-  clearTimeout(timeoutId);
+// 파일마다 업로드를 시작한 시점부터 60초가 지나면 중단한다
+export async function uploadToR2(file: File, uploadUrl: string) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, 60000);
+
+  let response: Response;
+  try {
+    response = await fetch(uploadUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": file.type,
+      },
+      body: Buffer.from(await file.arrayBuffer()),
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   if (!response.ok) {
     throw new FileUploadException("파일 업로드 실패");

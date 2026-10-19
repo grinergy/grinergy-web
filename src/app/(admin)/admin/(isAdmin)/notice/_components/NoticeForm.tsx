@@ -7,7 +7,6 @@ import {
   labelCss,
   SubmitButton,
 } from "@/components/admin/FormControls";
-import useAbortController from "@/hooks/useAbortController";
 import { toastUploadError, UploadFileData, uploadToR2 } from "@/libs/r2-upload";
 import { getErrorMessage } from "@/libs/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,7 +42,6 @@ export default function NoticeForm({
   const [uploadFiles, setUploadFiles] = useState<FileList | null>(null);
   const [uploadFilesData, setUploadFilesData] = useState<UploadFileData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const abort = useAbortController();
   const router = useRouter();
 
   const {
@@ -95,7 +93,7 @@ export default function NoticeForm({
     if (uploadFiles) {
       try {
         for (let i = 0; i < uploadFiles.length; i++) {
-          await uploadToR2(uploadFiles[i], uploadFilesData[i].uploadUrl, abort);
+          await uploadToR2(uploadFiles[i], uploadFilesData[i].uploadUrl);
           formData.append("files", uploadFilesData[i].fileKey);
         }
       } catch (error) {

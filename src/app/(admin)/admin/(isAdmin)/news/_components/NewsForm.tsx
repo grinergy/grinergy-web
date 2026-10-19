@@ -7,7 +7,6 @@ import {
   labelCss,
   SubmitButton,
 } from "@/components/admin/FormControls";
-import useAbortController from "@/hooks/useAbortController";
 import { toastUploadError, uploadToR2 } from "@/libs/r2-upload";
 import { getErrorMessage } from "@/libs/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,7 +32,6 @@ export default function NewsForm({
   const [uploadUrl, setUploadUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fileKey, setFileKey] = useState("");
-  const abort = useAbortController();
   const router = useRouter();
 
   const {
@@ -77,7 +75,7 @@ export default function NewsForm({
 
     if (photo) {
       try {
-        await uploadToR2(photo, uploadUrl, abort);
+        await uploadToR2(photo, uploadUrl);
         formData.append("photo", fileKey);
       } catch (error) {
         setIsLoading(false);
