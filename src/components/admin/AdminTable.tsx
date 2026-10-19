@@ -190,9 +190,9 @@ export default function AdminTable({ type, data }: AdminTableProps) {
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             className="lucide lucide-eye-icon lucide-eye size-[1.2rem] inline"
                           >
                             <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
@@ -204,9 +204,9 @@ export default function AdminTable({ type, data }: AdminTableProps) {
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             className="lucide lucide-eye-off-icon lucide-eye-off size-[1.2rem] inline"
                           >
                             <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
