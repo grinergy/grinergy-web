@@ -155,7 +155,7 @@ export default function NoticeForm({
               type="datetime-local"
               defaultValue={moment(notice.createdAt)
                 .tz("Asia/Seoul")
-                .format("YYYY-MM-DDTHH:MM")}
+                .format("YYYY-MM-DDTHH:mm")}
               {...register("createdAt")}
             />
             <FieldError message={errors.createdAt?.message} />
